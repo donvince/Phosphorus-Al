@@ -1,34 +1,34 @@
-class Node
-  attr_accessor :owner, :neighbours, :buttons
+class Atom
+  attr_accessor :owner, :neighbours, :neutrons
 
   def initialize()
     @neighbours = []
-    @buttons = 0
+    @neutrons = 0
     @owner = " "
   end
   
-  def add_button
-    @buttons += 1
+  def add_neutron
+    @neutrons += 1
     
-    if @buttons == @neighbours.count
-      @buttons = 0
-      disperse_buttons
-      if @buttons == 0 
+    if @neutrons == @neighbours.count
+      @neutrons = 0
+      disperse_neutrons
+      if @neutrons == 0 
         @owner = " "
       end
     end
   end
   
-  def disperse_buttons
+  def disperse_neutrons
     @neighbours.each do |neighbour|
        neighbour.owner = @owner
-       neighbour.add_button
+       neighbour.add_neutron
     end
   end
 end
 
 def create_grid(width, height)
-  grid = Array.new(width) { Array.new(height) {Node.new} }
+  grid = Array.new(width) { Array.new(height) {Atom.new} }
   
   for x in 0..width - 1
     for y in 0..height - 1
@@ -53,7 +53,7 @@ def show_grid(grid)
     line = ""
     for y in 0..grid[x].length - 1
       b = grid[x][y]
-      line += "|" + b.owner + b.buttons.to_s + " of " + b.neighbours.count.to_s
+      line += "|" + b.owner + b.neutrons.to_s + " of " + b.neighbours.count.to_s
     end
     line += "|"
     puts line
