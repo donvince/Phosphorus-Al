@@ -49,9 +49,9 @@ def create_grid(width, height)
 end
 
 def show_grid(grid)
-  for x in 0..grid.length - 1
+  for y in 0..grid.length - 1
     line = ""
-    for y in 0..grid[x].length - 1
+    for x in 0..grid[y].length - 1
       b = grid[x][y]
       line += "|" + b.owner + b.neutrons.to_s + " of " + b.neighbours.count.to_s
     end
