@@ -27,32 +27,40 @@ class Atom
   end
 end
 
-def create_grid(width, height)
-  grid = Array.new(width) { Array.new(height) {Atom.new} }
+class Grid2d
+  attr_accessor :width, :height
   
-  for x in 0..width - 1
-    for y in 0..height - 1
-      puts x.to_s + ", " + y.to_s
-      
-      if x + 1 < width
-        grid[x][y].neighbours << grid[x + 1][y]
-        grid[x + 1][y].neighbours << grid[x][y]
-      end
+  def initialize(width, height)
+    @width = width
+	@height = height
+	@grid = Array.new(width * height) { Atom.new }
+	
+    for x in 0..width - 1
+	  for y in 0..height - 1
+        if x + 1 < width
+          self[x, y].neighbours << self[x + 1, y]
+          self[x + 1, y].neighbours << self[x, y]
+        end
 
-      if y + 1 < height
-        grid[x][y].neighbours << grid[x][y + 1]
-        grid[x][y + 1].neighbours << grid[x][y]
-      end
+	    if y + 1 < height
+		  self[x, y].neighbours << self[x, y + 1]
+		  self[x, y + 1].neighbours << self[x, y]
+	    end
+	  end
     end
   end
-  grid
+  
+  def [](x, y)
+    return nil if x >= @width or y >= @height or x < 0 or y < 0
+    return @grid[x + y * width]
+  end
 end
 
 def show_grid(grid)
-  for y in 0..grid.length - 1
+  for y in 0..grid.height - 1
     line = ""
-    for x in 0..grid[y].length - 1
-      b = grid[x][y]
+    for x in 0..grid.width - 1
+      b = grid[x, y]
       line += "|" + b.owner + b.neutrons.to_s + " of " + b.neighbours.count.to_s
     end
     line += "|"
