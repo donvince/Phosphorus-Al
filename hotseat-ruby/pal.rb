@@ -13,20 +13,22 @@ class Atom
     @owner = player
     @neutrons += 1
     
-    if @neutrons == @neighbours.count
-      @neutrons = 0
-      disperse_neutrons
-      if @neutrons == 0 
-        @owner = " "
-      end
-    end
     return true
   end
   
-  def disperse_neutrons
+  def ready_to_pop?
+    @neutrons >= @neighbours.count
+  end
+  
+  def pop
+    return unless ready_to_pop?
+    @neutrons = @neutrons - @neighbours.count
     @neighbours.each do |neighbour|
        neighbour.owner = @owner
        neighbour.add_neutron(@owner)
+    end
+    if @neutrons == 0 
+      @owner = " "
     end
   end
 end
@@ -62,6 +64,15 @@ class Grid2d
   def has_winner?
     first_owner  = self[0, 0].owner
     @grid.all? {|i| i.owner != " " and i.owner == first_owner}
+  end
+  
+  def has_pending_reactions?
+    @grid.any? {|i| i.ready_to_pop?}
+  end
+  
+  def sweep_active_atoms
+    live_atoms = @grid.find_all {|i| i.ready_to_pop?}
+    live_atoms.each {|i| i.pop}
   end
 end
 
@@ -107,6 +118,12 @@ def start_game
       puts "Invalid move, try again!"
     end
     
+    while game_map.has_pending_reactions? and !game_map.has_winner?
+      puts "--"
+      show_grid(game_map)
+      puts "--"
+      game_map.sweep_active_atoms
+    end
   end
 end
 
