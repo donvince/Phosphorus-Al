@@ -66,6 +66,11 @@ class Grid2d
     @grid.all? {|i| i.owner != " " and i.owner == first_owner}
   end
   
+  def winner
+    return nil unless has_winner?
+    self[0, 0].owner
+  end
+  
   def has_pending_reactions?
     @grid.any? {|i| i.ready_to_pop?}
   end
@@ -77,6 +82,7 @@ class Grid2d
 end
 
 def show_grid(grid)
+  puts "--"
   for y in 0..grid.height - 1
     line = ""
     for x in 0..grid.width - 1
@@ -86,6 +92,7 @@ def show_grid(grid)
     line += "|"
     puts line
   end
+  puts "--"
 end
 
 def start_game
@@ -119,12 +126,12 @@ def start_game
     end
     
     while game_map.has_pending_reactions? and !game_map.has_winner?
-      puts "--"
       show_grid(game_map)
-      puts "--"
       game_map.sweep_active_atoms
     end
   end
+  show_grid(game_map)
+  puts "** Congratulations " + game_map.winner + "! **"
 end
 
 
