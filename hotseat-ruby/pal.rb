@@ -79,6 +79,12 @@ class Grid2d
     live_atoms = @grid.find_all {|i| i.ready_to_pop?}
     live_atoms.each {|i| i.pop}
   end
+  
+  def summarise_owners
+    summary = Hash.new(0)
+    @grid.each {|i| summary[i.owner] += 1}
+    summary
+  end
 end
 
 def show_grid(grid)
@@ -128,6 +134,7 @@ def start_game
     while game_map.has_pending_reactions? and !game_map.has_winner?
       show_grid(game_map)
       game_map.sweep_active_atoms
+      puts game_map.summarise_owners
     end
   end
   show_grid(game_map)
