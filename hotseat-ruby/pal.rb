@@ -1,10 +1,11 @@
 class Atom
-  attr_accessor :owner, :neighbours, :neutrons
+  attr_accessor :owner, :neighbours, :neutrons, :cold_owner
 
   def initialize()
     @neighbours = []
     @neutrons = 0
     @owner = " "
+    @cold_owner = " "
   end
   
   def add_neutron(player)
@@ -22,6 +23,7 @@ class Atom
   
   def pop
     return unless ready_to_pop?
+    @cold_owner = @owner
     @neutrons = @neutrons - @neighbours.count
     @neighbours.each do |neighbour|
        neighbour.owner = @owner
@@ -30,6 +32,10 @@ class Atom
     if @neutrons == 0 
       @owner = " "
     end
+  end
+  
+  def clear_cold_owner
+    @cold_owner = " "
   end
 end
 
@@ -62,13 +68,16 @@ class Grid2d
   end
   
   def has_winner?
+    return true if (summarise_cold_owners.count == 1 and summarise_cold_owners.keys[0] != " ")
+    
     first_owner  = self[0, 0].owner
     @grid.all? {|i| i.owner != " " and i.owner == first_owner}
   end
   
   def winner
     return nil unless has_winner?
-    self[0, 0].owner
+    return self[0, 0].owner if self[0, 0].owner != " "
+    return summarise_cold_owners.keys[0]
   end
   
   def has_pending_reactions?
@@ -80,11 +89,22 @@ class Grid2d
     live_atoms.each {|i| i.pop}
   end
   
+  def clear_cold_owners
+    @grid.each {|i| i.clear_cold_owner}
+  end
+  
   def summarise_owners
     summary = Hash.new(0)
     @grid.each {|i| summary[i.owner] += 1}
     summary
   end
+
+  def summarise_cold_owners
+    summary = Hash.new(0)
+    @grid.each {|i| summary[i.cold_owner] += 1}
+    summary
+  end
+  
 end
 
 def show_grid(grid)
@@ -117,6 +137,7 @@ def start_game
   player_ones_move = true
   
   until game_map.has_winner? do
+    game_map.clear_cold_owners
     show_grid(game_map)
     current_player = player_ones_move ? player_one : player_two
     puts current_player
@@ -134,7 +155,8 @@ def start_game
     while game_map.has_pending_reactions? and !game_map.has_winner?
       show_grid(game_map)
       game_map.sweep_active_atoms
-      puts game_map.summarise_owners
+      puts "current: " + game_map.summarise_owners.to_s
+      puts "cold: " + game_map.summarise_cold_owners.to_s
     end
   end
   show_grid(game_map)
