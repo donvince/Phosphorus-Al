@@ -23,7 +23,7 @@ This is a game which you play on a grid, for example a 3x3 grid:
 
 In turn, each player takes a place on the grid.
 
-Lets say that our players are "D" for Don and "W" for Willy.
+Let's say that our players are "D" for Don and "W" for Willy.
 
 Don goes first and takes the top left corner:
 
@@ -70,7 +70,7 @@ Anyway, Willy is going to take the top right hand corner:
 </table>
 
 
-Still underwhealmed? Fear not, it's going to get exciting right about now: that top left hand corner had two direct neighbours, Don's going to make his next move and add to that square, which from now on we're going to call atom, when he does, it's going to go pop and spread to the neighbouring atoms!
+Still underwhelmed? Fear not, it's going to get exciting right about now: that top left hand corner had two direct neighbours, Don's going to make his next move and add to that square, which from now on we're going to call atom, when he does, it's going to go pop and spread to the neighbouring atoms!
 
 Don makes his move:
 
@@ -98,7 +98,7 @@ And the square goes pop!
     <tr>
         <td> _0 </td>
         <td> D1 </td>
-        <td> W0 </td>
+        <td> W1 </td>
     </tr>
     <tr>
         <td> D1 </td>
