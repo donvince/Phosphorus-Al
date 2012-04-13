@@ -2,8 +2,100 @@
   <head>
     <title>Phosphorus Al!</title>
     <script type="text/javascript">
-      
+      function Atom()
+      {
+        this.neighbours = [];
+        this.neutrons = 0;
+        this.owner = " ";
+        this.coldOwner = " ";
+
+        this.addNeutron = function(player)
+        { 
+          if (this.owner != " " && this.owner != player) return false;
+          
+          this.owner = player;
+          this.neutrons += 1;
     
+          return true;
+        };
+        
+        this.readyToPop = function()
+        {
+          return this.neutrons >= this.neighbours.count;
+        };
+        
+        this.pop = function()
+        {
+          if (!readyToPop) return;
+          
+          this.coldOwner = this.owner;
+          this.neutrons = this.neutrons - this.neighbours.count;
+          for (neighbour in neighbours)
+          {
+             neighbour.owner = this.owner;
+             neighbour.addNeutron(this.owner);
+          }
+          if (this.neutrons == 0)
+          {
+            this.owner = " ";
+          }
+        };
+        
+        this.clearColdOwner = function()
+        {
+          this.coldOwner = " ";
+        };
+      }
+   
+      function Grid2d(width, height)
+      {
+        this.width = width;
+        this.height = height;
+        this.grid = new Array(width * height);
+        for (i=0;i<this.grid.length;i++)
+        {
+          this.grid[i] = new Atom();
+        }
+        
+        this.item = function(x, y)
+        {
+          if (x >= this.width || y >= this.height | x < 0 || y < 0)
+          {
+            return;
+          }
+          
+          return this.grid[x + y * width];
+        };
+
+        for (x=0;x<width;x++)
+        {
+          for (y=0;y<height;y++)
+          {
+            if (x + 1 < width - 1)
+            {
+              this.item(x, y).neighbours.push(this.item(x + 1, y));
+              this.item(x + 1, y).neighbours.push(this.item(x, y));
+            }
+
+            if (y + 1 < height - 1)
+            {
+              this.item(x, y).neighbours.push(this.item(x, y + 1));
+              this.item(x, y + 1).neighbours.push(this.item(x, y));
+            }
+          }
+        }
+        
+      }
+
+   
+    
+    
+    function start_game()
+    {
+      x = new Grid2d(3, 3);
+      y = x.item(0, 0).readyToPop();
+      document.getElementById("game_area").innerHTML= y;
+    }
     
     
     </script>
@@ -30,10 +122,10 @@
             <td><input type="text" name="height" /></td>
         </tr>
       </table>
-      <input type="button" value="Start!">
+      <input type="button" value="Start!" onclick="start_game()" />
     </form> 
 
-    
+    <p id="game_area">Hello</p>
 
   </body>
 </html>
