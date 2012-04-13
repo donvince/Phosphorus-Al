@@ -85,16 +85,52 @@
           }
         }
         
+        this.summariseOwners = function()
+        {
+          summary = {};
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            if (item.owner in summary)
+            {
+              summary[item.owner] ++;
+            }
+            else
+            {
+              summary[item.owner] = 1;
+            }
+          }
+          return summary;
+        }
+
+        this.summariseColdOwners = function()
+        {
+          summary = {};
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            if (item.coldOwner in summary)
+            {
+              summary[item.coldOwner] ++;
+            }
+            else
+            {
+              summary[item.coldOwner] = 1;
+            }
+          }
+          return summary;
+        }
+
       }
 
    
     
     
-    function start_game()
+    function startGame()
     {
       x = new Grid2d(3, 3);
-      y = x.item(0, 0).readyToPop();
-      document.getElementById("game_area").innerHTML= y;
+      y = x.summariseOwners();
+      document.getElementById("game_area").innerHTML = y[" "];
     }
     
     
@@ -122,7 +158,7 @@
             <td><input type="text" name="height" /></td>
         </tr>
       </table>
-      <input type="button" value="Start!" onclick="start_game()" />
+      <input type="button" value="Start!" onclick="startGame()" />
     </form> 
 
     <p id="game_area">Hello</p>
