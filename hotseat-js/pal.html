@@ -123,7 +123,7 @@
 
         this.hasWinner = function()
         {
-          if (this.summariseColdOwners.count == 1 && this.summariseColdOwners.keys[0] != " ")
+          if (Object.keys(this.summariseColdOwners()).length == 1 && Object.keys(this.summariseColdOwners())[0] != " ")
           {
             return true;
           }
@@ -192,17 +192,60 @@
             item.ClearColdOwner();
           }
         };
-        
       }
 
+      function showGrid(grid)
+      {
+        table = '<table border="1">';
+        for (y=0;y<grid.height;y++)
+        {
+          table += '<tr>';
+          for (x=0;x<grid.width;x++)
+          {
+            b = grid.item(x,y);
+            table += '<td>';
+            table += b.owner + b.neutrons + " of " + b.neighbours.length;
+            table += '</td>';
+          }
+          table += '</tr>';
+        }
+        table += '</table>';
+        return table;
+      }
+      
+      
+      function startGame()
+      {
+        playerOne = document.forms["gameSetup"]["player1"].value;
+        playerTwo = document.forms["gameSetup"]["player2"].value;
+        width = document.forms["gameSetup"]["width"].value;
+        height = document.forms["gameSetup"]["height"].value;
+        
+        gameMap = new Grid2d(width, height);
+        
+        playerOnesMove = true;
+        
+        while(!gameMap.hasWinner())
+        {
+          gameMap.clearColdOwners();
+          document.getElementById("game_area").innerHTML = showGrid();
+          currentPlayer = playerOnesMove ? playerOne : playerTwo;
+          document.getElementById("notification_area").innerHTML = currentPlayer + "'s move!";
+          
+          // get move
+        }
     
+      
+        
+
+      }
     
-    function startGame()
-    {
-      x = new Grid2d(3, 3);
-      y = x.clearColdOwners();
-      document.getElementById("game_area").innerHTML = y;
-    }
+      function debug()
+      {
+        x = new Grid2d(3, 3);
+        y = x.hasWinner();
+        document.getElementById("notification_area").innerHTML = y;
+      }
     
     
     </script>
@@ -210,7 +253,7 @@
   <body>
     <h1>Phosphorus Al</h1>
     
-    <form>
+    <form name="gameSetup">
       <table>
         <tr>
             <td>Player 1:</td>
@@ -229,10 +272,11 @@
             <td><input type="text" name="height" /></td>
         </tr>
       </table>
-      <input type="button" value="Start!" onclick="startGame()" />
+      <input type="button" value="Start!" onclick="debug()" />
     </form> 
 
-    <p id="game_area">Hello</p>
+    <p id="notification_area">Fill in the details above and click start!</p>
+    <p id="game_area">Then the fun and games will begin :o)</p>
 
   </body>
 </html>
