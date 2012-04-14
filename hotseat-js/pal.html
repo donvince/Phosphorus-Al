@@ -141,6 +141,14 @@
           }
           return won;
         }
+        
+        this.winner = function()
+        {
+          if (!this.hasWinner()) return;
+          if (this.item(0, 0).owner != " ") return this.item(0, 0).owner;
+          return Object.keys(this.summariseColdOwners())[0]
+        }
+        
       }
 
    
@@ -149,7 +157,7 @@
     function startGame()
     {
       x = new Grid2d(3, 3);
-      y = x.hasWinner();
+      y = x.winner();
       document.getElementById("game_area").innerHTML = y;
     }
     
