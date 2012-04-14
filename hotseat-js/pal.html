@@ -121,6 +121,26 @@
           return summary;
         }
 
+        this.hasWinner = function()
+        {
+          if (this.summariseColdOwners.count == 1 && this.summariseColdOwners.keys[0] != " ")
+          {
+            return true;
+          }
+          
+          firstOwner = this.item(0, 0).owner;
+          
+          won = true;
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            if(item.owner == " " || item.owner != firstOwner)
+            {
+              won = false;
+            }
+          }
+          return won;
+        }
       }
 
    
@@ -129,8 +149,8 @@
     function startGame()
     {
       x = new Grid2d(3, 3);
-      y = x.summariseOwners();
-      document.getElementById("game_area").innerHTML = y[" "];
+      y = x.hasWinner();
+      document.getElementById("game_area").innerHTML = y;
     }
     
     
