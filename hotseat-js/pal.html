@@ -189,7 +189,7 @@
           for(i in this.grid)
           {
             item = this.grid[i];
-            item.ClearColdOwner();
+            item.clearColdOwner();
           }
         };
       }
@@ -228,7 +228,7 @@
         while(!gameMap.hasWinner())
         {
           gameMap.clearColdOwners();
-          document.getElementById("game_area").innerHTML = showGrid();
+          document.getElementById("game_area").innerHTML = showGrid(gameMap);
           currentPlayer = playerOnesMove ? playerOne : playerTwo;
           document.getElementById("notification_area").innerHTML = currentPlayer + "'s move!";
           
@@ -272,7 +272,7 @@
             <td><input type="text" name="height" /></td>
         </tr>
       </table>
-      <input type="button" value="Start!" onclick="debug()" />
+      <input type="button" value="Start!" onclick="startGame()" />
     </form> 
 
     <p id="notification_area">Fill in the details above and click start!</p>
