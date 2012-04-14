@@ -137,10 +137,11 @@
             if(item.owner == " " || item.owner != firstOwner)
             {
               won = false;
+              break;
             }
           }
           return won;
-        }
+        };
         
         this.winner = function()
         {
@@ -149,15 +150,57 @@
           return Object.keys(this.summariseColdOwners())[0]
         }
         
+        this.hasPendingReactions = function()
+        {
+          ready = false;
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            if(item.readyToPop())
+            {
+              ready = true;
+              break;
+            }
+          }
+          return ready;
+        };
+  
+        this.sweepActiveAtoms = function()
+        {
+          liveAtoms = [];
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            if(item.readyToPop())
+            {
+              liveAtoms.push(item);
+            }
+          }
+
+          for(i in liveAtoms)
+          {
+            item = liveAtoms[i];
+            item.pop();
+          }
+        };
+        
+        this.clearColdOwners = function()
+        {
+          for(i in this.grid)
+          {
+            item = this.grid[i];
+            item.ClearColdOwner();
+          }
+        };
+        
       }
 
-   
     
     
     function startGame()
     {
       x = new Grid2d(3, 3);
-      y = x.winner();
+      y = x.clearColdOwners();
       document.getElementById("game_area").innerHTML = y;
     }
     
